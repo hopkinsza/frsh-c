@@ -42,7 +42,7 @@ var		return KW_VAR;
 true		yylval.Bool = true;  return BOOL;
 false		yylval.Bool = false; return BOOL;
 
- /* numbers supported by strtol(3) */
+ /* numbers supported by strtol(3) with base 0 */
 "-"?0{dig}({dig}|_)*			{
 	rm_undsc(yytext);
 	yylval.Int = strtol(yytext, NULL, 0);
