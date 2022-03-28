@@ -29,14 +29,9 @@ dec_digit	[0-9]
 bin_digit	[0-1]
 oct_digit	[0-7]
 hex_digit	[0-9a-fA-F]
-dec_digund	{dec_digit}|_
-bin_digund	{bin_digit}|_
-oct_digund	{oct_digit}|_
-hex_digund	{hex_digit}|_
 
 ident	[a-zA-Z_]{alnum}*
 
-flolit	{intlit}"."{dig}+
 strlit	\"{let}*\"
 
 %%
@@ -70,11 +65,25 @@ false		yylval.Bool = false; return BOOL;
 	bool neg;
 	if (yytext[0] == '-') {
 		neg = true;
+		yytext++;
 	}
+	yytext += 2;
+
+	rm_undsc(yytext);
+	yylval.Int = strtol(yytext, NULL, 2);
 	return INT;
 }
 "-"?0o{oct_digit}+	{
 	/* diff */
+	bool neg;
+	if (yytext[0] == '-') {
+		neg = true;
+		yytext++;
+	}
+	yytext += 2;
+
+	rm_undsc(yytext);
+	yylval.Int = strtol(yytext, NULL, 8);
 	return INT;
 }
 
